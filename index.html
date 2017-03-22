@@ -1,114 +1,114 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <link rel="stylesheet" type="text/css" href="style.css">
-  <!--<link rel="stylesheet" media="screen" href="css/style.css" />-->
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <!--<link rel="stylesheet" media="screen" href="css/style.css" />-->
 
-  <script src="js/countdown.js"></script>
+    <script src="js/countdown.js"></script>
 
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Open Source | Aalborg</title>
+    <title>Open Source | Aalborg</title>
 
 </head>
 
 <body>
-  <nav>
+<nav>
     <ul>
-      <li class="active"><a href="http://www.os-aalborg.dk">Home</a></li>
-      <li class="notactive"><a href="http://www.os-aalborg.dk/about.html">About</a></li>
-      <li class="notactive"><a href="http://www.os-aalborg.dk/contact.html">Contact</a></li>
+        <li class="active"><a href="http://www.os-aalborg.dk">Home</a></li>
+        <li class="notactive"><a href="http://www.os-aalborg.dk/about.html">About</a></li>
+        <li class="notactive"><a href="http://www.os-aalborg.dk/contact.html">Contact</a></li>
     </ul>
-  </nav>
-  <header>
-  </header>
-  <main>
+</nav>
+<header>
+</header>
+<main>
     <section>
-      Next meetup in:
+        Next meetup in:
     </section>
     <section id="section_countdown">
-      <div id="fetchingdiv">
-        Fetching event info...
-      </div>
-      <time id="CDT">
-      </time>
-      <div id="current_description">
-      </div>
-      <div id="facebookdiv">
-        <a id="facebooklink" href="https://www.facebook.com/groups/912891492136446/">Find us on Facebook for more info!</a>
-      </div>
+        <div id="fetchingdiv">
+            Fetching event info...
+        </div>
+        <time id="CDT">
+        </time>
+        <div id="current_description">
+        </div>
+        <div id="facebookdiv">
+            <a id="facebooklink" href="https://www.facebook.com/groups/912891492136446/">Find us on Facebook for more
+                info!</a>
+        </div>
     </section>
     <section id="section_events" class="events">
     </section>
-  </main>
-  <footer>
-  </footer>
-  <script type="text/javascript">
-		(function() {
-		  var httpRequest;
-		  function makeRequest(url) {
-			httpRequest = new XMLHttpRequest();
+</main>
+<footer>
+</footer>
+<script type="text/javascript">
+    (function () {
+        var httpRequest;
 
-			if (!httpRequest) {
-			  alert('Giving up :( Cannot create an XMLHTTP instance');
-			  return false;
-			}
-			httpRequest.onreadystatechange = alertContents;
-			httpRequest.open('GET', url);
-			httpRequest.send();
-		  }
+        function makeRequest(url) {
+            httpRequest = new XMLHttpRequest();
 
-		  function alertContents() {
-			if (httpRequest.readyState === XMLHttpRequest.DONE) {
-			  if (httpRequest.status === 200) {
-				var obj = JSON.parse(httpRequest.responseText);
-		
-				var upcomming_event = obj[0];
-				obj.forEach(function(event){
-          var MYsection_events = document.getElementById('section_events');
-          MYsection_events.innerHTML = MYsection_events.innerHTML + '<article><time>' + event.name + '</time><details>' + event.description + '</details></article>';
-
-					if(new Date(event.start_time.slice(0,19))-Date.now() > 0){
-						if(new Date(event.start_time.slice(0,19))-Date.now() < new Date(upcomming_event.start_time.slice(0,19))-Date.now())
-						{
-							upcomming_event = event;
-						}
-					}
-				});
-
-				// HACKY TEMPORARY SOLUTION TO FIX WEBKIT PROBLEMS
-				// It works for me, so good enough
-				if('WebkitAppearance' in document.documentElement.style) {
-					console.log(upcomming_event.start_time);
-					var s = upcomming_event.start_time.substr(12,1);
-					var i = parseInt(s);
-					i--;
-					upcomming_event.start_time = upcomming_event.start_time.substr(0, 12) + i + upcomming_event.start_time.substr(13);
-					console.log(upcomming_event.start_time);
-				}
-
-				CDT(upcomming_event.start_time.slice(0,19));
-
-        if(new Date(upcomming_event.start_time.slice(0,19))-Date.now() < -15000000){	// Standard: 15000000
-
-          document.getElementById("clock_string").innerHTML = "No upcomming meeting...";
+            if (!httpRequest) {
+                alert('Giving up :( Cannot create an XMLHTTP instance');
+                return false;
+            }
+            httpRequest.onreadystatechange = alertContents;
+            httpRequest.open('GET', url);
+            httpRequest.send();
         }
 
-        document.getElementById("current_description").innerHTML = upcomming_event.description;
+        function alertContents() {
+            if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                if (httpRequest.status === 200) {
+                    var obj = JSON.parse(httpRequest.responseText);
 
-        // Hides the fetching div after finishing
-        document.getElementById("fetchingdiv").style.display = 'none';
-			  } else {
-				alert('There was a problem with the request.');
-			  }
-			}
-		  }
-		  //makeRequest('feed.php?current=true');
-      makeRequest('feed.php');
-		})();
-		</script>
+                    var upcomming_event = obj[0];
+                    obj.forEach(function (event) {
+                        var MYsection_events = document.getElementById('section_events');
+                        MYsection_events.innerHTML = MYsection_events.innerHTML + '<article><time>' + event.name + '</time><details>' + event.description + '</details></article>';
+
+                        if (new Date(event.start_time.slice(0, 19)) - Date.now() > 0) {
+                            if (new Date(event.start_time.slice(0, 19)) - Date.now() < new Date(upcomming_event.start_time.slice(0, 19)) - Date.now()) {
+                                upcomming_event = event;
+                            }
+                        }
+                    });
+
+                    // HACKY TEMPORARY SOLUTION TO FIX WEBKIT PROBLEMS
+                    // It works for me, so good enough
+                    if ('WebkitAppearance' in document.documentElement.style) {
+                        console.log(upcomming_event.start_time);
+                        var s = upcomming_event.start_time.substr(12, 1);
+                        var i = parseInt(s);
+                        i--;
+                        upcomming_event.start_time = upcomming_event.start_time.substr(0, 12) + i + upcomming_event.start_time.substr(13);
+                        console.log(upcomming_event.start_time);
+                    }
+
+                    CDT(upcomming_event.start_time.slice(0, 19));
+
+                    if (new Date(upcomming_event.start_time.slice(0, 19)) - Date.now() < -15000000) {	// Standard: 15000000
+
+                        document.getElementById("clock_string").innerHTML = "No upcomming meeting...";
+                    }
+
+                    document.getElementById("current_description").innerHTML = upcomming_event.description;
+
+                    // Hides the fetching div after finishing
+                    document.getElementById("fetchingdiv").style.display = 'none';
+                } else {
+                    alert('There was a problem with the request.');
+                }
+            }
+        }
+
+        //makeRequest('feed.php?current=true');
+        makeRequest('feed.php');
+    })();
+</script>
 </body>
-
 </html>
