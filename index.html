@@ -89,8 +89,6 @@
 
                     var upcomming_event = obj[0];
                     obj.forEach(function (event) {
-                        //var MYsection_events = document.getElementById('section_events');
-
                         var opensourcenight_events = document.getElementById('os-night');
                         var opensourceevent_events = document.getElementById('os-event');
 
@@ -99,8 +97,6 @@
                         } else {
                             opensourceevent_events.innerHTML = opensourceevent_events.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + escapeHTML(event.description) + '</details></article>';
                         }
-
-                        //MYsection_events.innerHTML = MYsection_events.innerHTML + '<article><time>' + event.name + ' - ' + event.start_time.substring(0, 10) + '</time><details>' + event.description + '</details></article>';
 
                         if (new Date(event.start_time.slice(0, 19)) - Date.now() > 0) {
                             if (new Date(event.start_time.slice(0, 19)) - Date.now() < new Date(upcomming_event.start_time.slice(0, 19)) - Date.now()) {
@@ -138,7 +134,6 @@
             }
         }
 
-        //makeRequest('feed.php?current=true');
         makeRequest('feed.php');
     })();
 </script>
