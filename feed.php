@@ -1,4 +1,5 @@
 <?
+header('Content-Type: application/json');
 //Save json return from facebook to a variable
 $result = file_get_contents("events.txt");
 //convert json result to php so we can run sort on it.

@@ -57,6 +57,16 @@
 <footer>
 </footer>
 <script type="text/javascript">
+    function escapeHTML (unsafe_str) {
+        return unsafe_str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/\"/g, '&quot;')
+            .replace(/\'/g, '&#39;')
+            .replace(/\//g, '&#x2F;')
+    }
+
     (function () {
         var httpRequest;
 
@@ -85,9 +95,9 @@
                         var opensourceevent_events = document.getElementById('os-event');
 
                         if(event.name.startsWith('Open Source Night')) {
-                            opensourcenight_events.innerHTML = opensourcenight_events.innerHTML + '<article><time>' + event.name + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + event.description + '</details></article>';
+                            opensourcenight_events.innerHTML = opensourcenight_events.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + escapeHTML(event.description) + '</details></article>';
                         } else {
-                            opensourceevent_events.innerHTML = opensourceevent_events.innerHTML + '<article><time>' + event.name + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + event.description + '</details></article>';
+                            opensourceevent_events.innerHTML = opensourceevent_events.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + escapeHTML(event.description) + '</details></article>';
                         }
 
                         //MYsection_events.innerHTML = MYsection_events.innerHTML + '<article><time>' + event.name + ' - ' + event.start_time.substring(0, 10) + '</time><details>' + event.description + '</details></article>';
@@ -117,8 +127,8 @@
                         document.getElementById("clock_string").innerHTML = "No upcomming meeting...";
                     }
 
-                    document.getElementById("eventtitle").innerHTML = upcomming_event.name;
-                    document.getElementById("current_description").innerHTML = upcomming_event.description;
+                    document.getElementById("eventtitle").innerHTML = escapeHTML(upcomming_event.name);
+                    document.getElementById("current_description").innerHTML = escapeHTML(upcomming_event.description);
 
                     // Hides the fetching div after finishing
                     document.getElementById("fetchingdiv").style.display = 'none';
