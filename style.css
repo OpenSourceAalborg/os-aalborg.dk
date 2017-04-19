@@ -26,7 +26,7 @@ main {
 
 #section_countdown, .events article {
   background-color: rgba(255,255,255,0.3);
-  margin: 50px 0;
+  margin: 10px 0;
   border-radius: 10px;
   padding: 50px;
   color: darkgray;
@@ -355,4 +355,33 @@ top:50px;
 background: #45e8fb;
 -webkit-transform: rotate(10deg);
 -moz-transform: rotate(10deg);
+}
+
+#eventtitle {
+    font-size: 36px;
+}
+
+/*
+COLUMNS
+ */
+
+.column-container {
+    width: 100%;
+    display: table;
+}
+
+.column {
+    display: table-cell;
+    width: 45%;
+    padding: 2.5%;
+}
+
+.os-night-title {
+    background-color: rgba(255,255,255,0.3);
+    margin: 10px 0;
+    border-radius: 10px;
+    padding: 10px;
+    color: darkgray;
+    text-align: center;
+    font-size: 24px;
 }

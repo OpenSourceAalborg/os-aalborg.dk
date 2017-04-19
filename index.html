@@ -18,7 +18,7 @@
     <ul>
         <li class="active"><a href="http://www.os-aalborg.dk">Home</a></li>
         <li class="notactive"><a href="http://www.os-aalborg.dk/about.html">About</a></li>
-        <li class="notactive"><a href="http://www.os-aalborg.dk/contact.html">Contact</a></li>
+        <li class="notactive"><a href="https://riot.im/app/#/room/#os-aalborg:matrix.org">Contact (IRC)</a></li>
     </ul>
 </nav>
 <header>
@@ -28,6 +28,9 @@
         Next meetup in:
     </section>
     <section id="section_countdown">
+        <div id="eventtitle">
+
+        </div>
         <div id="fetchingdiv">
             Fetching event info...
         </div>
@@ -42,6 +45,14 @@
     </section>
     <section id="section_events" class="events">
     </section>
+    <div class="column-container">
+        <div class="column events" id="os-night">
+            <div class="os-night-title">Open Source Nights</div>
+        </div>
+        <div class="column events" id="os-event">
+            <div class="os-night-title">Open Source Events</div>
+        </div>
+    </div>
 </main>
 <footer>
 </footer>
@@ -68,8 +79,18 @@
 
                     var upcomming_event = obj[0];
                     obj.forEach(function (event) {
-                        var MYsection_events = document.getElementById('section_events');
-                        MYsection_events.innerHTML = MYsection_events.innerHTML + '<article><time>' + event.name + '</time><details>' + event.description + '</details></article>';
+                        //var MYsection_events = document.getElementById('section_events');
+
+                        var opensourcenight_events = document.getElementById('os-night');
+                        var opensourceevent_events = document.getElementById('os-event');
+
+                        if(event.name.startsWith('Open Source Night')) {
+                            opensourcenight_events.innerHTML = opensourcenight_events.innerHTML + '<article><time>' + event.name + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + event.description + '</details></article>';
+                        } else {
+                            opensourceevent_events.innerHTML = opensourceevent_events.innerHTML + '<article><time>' + event.name + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + event.description + '</details></article>';
+                        }
+
+                        //MYsection_events.innerHTML = MYsection_events.innerHTML + '<article><time>' + event.name + ' - ' + event.start_time.substring(0, 10) + '</time><details>' + event.description + '</details></article>';
 
                         if (new Date(event.start_time.slice(0, 19)) - Date.now() > 0) {
                             if (new Date(event.start_time.slice(0, 19)) - Date.now() < new Date(upcomming_event.start_time.slice(0, 19)) - Date.now()) {
@@ -96,6 +117,7 @@
                         document.getElementById("clock_string").innerHTML = "No upcomming meeting...";
                     }
 
+                    document.getElementById("eventtitle").innerHTML = upcomming_event.name;
                     document.getElementById("current_description").innerHTML = upcomming_event.description;
 
                     // Hides the fetching div after finishing
