@@ -48,6 +48,15 @@
     </section>
     -->
     <div class="column-container">
+        <div class="column-left events" id="os-night-next">
+            <div class="os-night-title">Upcoming Open Source Nights</div>
+        </div>
+        <div class="column-right events" id="os-event-next">
+            <div class="os-night-title">Upcoming Open Source Events</div>
+        </div>
+    </div>
+
+    <div class="column-container">
         <div class="column-left events" id="os-night">
             <div class="os-night-title">Open Source Nights</div>
         </div>
@@ -90,22 +99,58 @@
                     var obj = JSON.parse(httpRequest.responseText);
 
                     var upcomming_event = obj[0];
+
+                    var opensourcenight_events = document.getElementById('os-night');
+                    var opensourceevent_events = document.getElementById('os-event');
+                    var opensourcenight_next = document.getElementById('os-night-next');
+                    var opensourceevent_next = document.getElementById('os-event-next');
+
+                    var hasNextNight = false;
+                    var hasNextEvent = false;
+
                     obj.forEach(function (event) {
-                        var opensourcenight_events = document.getElementById('os-night');
-                        var opensourceevent_events = document.getElementById('os-event');
 
-                        if (event.name.startsWith('Open Source Night')) {
-                            opensourcenight_events.innerHTML = opensourcenight_events.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + escapeHTML(event.description) + '</details></article>';
-                        } else {
-                            opensourceevent_events.innerHTML = opensourceevent_events.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + escapeHTML(event.description) + '</details></article>';
+
+                        if (new Date(event.start_time.slice(0, 19)) > Date.now()) {
+                            console.log(event.name + " is is the future");
+                            if (event.name.startsWith('Open Source Night')) {
+                                hasNextNight = true;
+                                opensourcenight_next.innerHTML = opensourcenight_next.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + escapeHTML(event.description) + '</details></article>';
+                            } else {
+                                hasNextEvent = true;
+                                opensourceevent_next.innerHTML = opensourceevent_next.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + escapeHTML(event.description) + '</details></article>';
+                            }
+
+                            if (new Date(event.start_time.slice(0, 19)) - Date.now() > 0) {
+                                if (new Date(event.start_time.slice(0, 19)) - Date.now() < new Date(upcomming_event.start_time.slice(0, 19)) - Date.now()) {
+                                    upcomming_event = event;
+                                }
+                            }
                         }
+                        else {
+                            if (event.name.startsWith('Open Source Night')) {
+                                opensourcenight_events.innerHTML = opensourcenight_events.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + escapeHTML(event.description) + '</details></article>';
+                            } else {
+                                opensourceevent_events.innerHTML = opensourceevent_events.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + escapeHTML(event.description) + '</details></article>';
+                            }
 
-                        if (new Date(event.start_time.slice(0, 19)) - Date.now() > 0) {
-                            if (new Date(event.start_time.slice(0, 19)) - Date.now() < new Date(upcomming_event.start_time.slice(0, 19)) - Date.now()) {
-                                upcomming_event = event;
+                            if (new Date(event.start_time.slice(0, 19)) - Date.now() > 0) {
+                                if (new Date(event.start_time.slice(0, 19)) - Date.now() < new Date(upcomming_event.start_time.slice(0, 19)) - Date.now()) {
+                                    upcomming_event = event;
+                                }
                             }
                         }
                     });
+
+                    if(!hasNextNight)
+                    {
+                        opensourcenight_next.innerHTML = opensourcenight_next.innerHTML + '<article style="text-align: center">No Upcoming Open Source Night</article>';
+                    }
+
+                    if (!hasNextEvent)
+                    {
+                        opensourceevent_next.innerHTML = opensourceevent_next.innerHTML + '<article style="text-align: center">No Upcoming Open Source Event</article>';
+                    }
 
                     // HACKY TEMPORARY SOLUTION TO FIX WEBKIT PROBLEMS
                     // It works for me, so good enough
