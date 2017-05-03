@@ -365,15 +365,35 @@ background: #45e8fb;
 COLUMNS
  */
 
-.column-container {
-    width: 100%;
-    display: table;
+.column-container::after {
+    content: "";
+    clear: both;
+    display: block;
 }
 
-.column {
-    display: table-cell;
+.column-left {
     width: 45%;
     padding: 2.5%;
+}
+
+.column-right {
+    width: 45%;
+    padding: 2.5%;
+}
+
+@media only screen and (max-width: 768px) {
+    [class*="column-"] {
+        width: 95%;
+        padding: 2.5%;
+    }
+}
+
+[class*="column-right"] {
+    float: right;
+}
+
+[class*="column-left"] {
+    float:left;
 }
 
 .os-night-title {

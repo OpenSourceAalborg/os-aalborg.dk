@@ -24,6 +24,15 @@
 <header>
 </header>
 <main>
+
+    <div class="test-header">
+        <h1>Header</h1>
+    </div>
+
+    <div class="test-footer">
+        <h1>Footer</h1>
+    </div>
+
     <section>
         Next meetup in:
     </section>
@@ -45,19 +54,27 @@
     </section>
     <section id="section_events" class="events">
     </section>
+
     <div class="column-container">
-        <div class="column events" id="os-night">
+
+        <div class="column-left events" id="os-night">
+
             <div class="os-night-title">Open Source Nights</div>
+
         </div>
-        <div class="column events" id="os-event">
+
+        <div class="column-right events" id="os-event">
+
             <div class="os-night-title">Open Source Events</div>
+
         </div>
+
     </div>
 </main>
 <footer>
 </footer>
 <script type="text/javascript">
-    function escapeHTML (unsafe_str) {
+    function escapeHTML(unsafe_str) {
         return unsafe_str
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
@@ -92,7 +109,7 @@
                         var opensourcenight_events = document.getElementById('os-night');
                         var opensourceevent_events = document.getElementById('os-event');
 
-                        if(event.name.startsWith('Open Source Night')) {
+                        if (event.name.startsWith('Open Source Night')) {
                             opensourcenight_events.innerHTML = opensourcenight_events.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + escapeHTML(event.description) + '</details></article>';
                         } else {
                             opensourceevent_events.innerHTML = opensourceevent_events.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + escapeHTML(event.description) + '</details></article>';
