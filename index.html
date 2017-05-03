@@ -112,7 +112,6 @@
 
 
                         if (new Date(event.start_time.slice(0, 19)) > Date.now()) {
-                            console.log(event.name + " is is the future");
                             if (event.name.startsWith('Open Source Night')) {
                                 hasNextNight = true;
                                 opensourcenight_next.innerHTML = opensourcenight_next.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + escapeHTML(event.description) + '</details></article>';
