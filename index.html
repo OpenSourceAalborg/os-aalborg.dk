@@ -99,6 +99,14 @@
             unique_element.innerHTML = unique_element.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + (event.hasOwnProperty('description') ? escapeHTML(event.description) : '') + '</details></article>';
         }
 
+        function sliceStartTime(time) {
+            return new Date(time.start_time.slice(0,19));
+        }
+
+        function relativeStartTime(time) {
+            return sliceStartTime(time) - Date.now();
+        }
+
         function alertContents() {
             if (httpRequest.readyState === XMLHttpRequest.DONE) {
                 if (httpRequest.status === 200) {
@@ -115,7 +123,7 @@
                     var hasNextEvent = false;
 
                     obj.forEach(function (event) {
-                        if (new Date(event.start_time.slice(0, 19)) > Date.now()) {     // The event is in the future
+                        if (relativeStartTime(event)) {     // The event is in the future
                             if (event.name.startsWith('Open Source Night')) {
                                 hasNextNight = true;
                                 addEventCard(opensourcenight_next, event);
@@ -124,8 +132,8 @@
                                 addEventCard(opensourceevent_next, event);
                             }
 
-                            if (new Date(event.start_time.slice(0, 19)) - Date.now() > 0) {
-                                if (new Date(event.start_time.slice(0, 19)) - Date.now() < new Date(upcomming_event.start_time.slice(0, 19)) - Date.now()) {
+                            if (relativeStartTime(event) > 0) {
+                                if (relativeStartTime(event) < (relativeStartTime(upcomming_event))) {
                                     upcomming_event = event;
                                 }
                             }
@@ -137,8 +145,8 @@
                                 addEventCard(opensourceevent_events, event);
                             }
 
-                            if (new Date(event.start_time.slice(0, 19)) - Date.now() > 0) {
-                                if (new Date(event.start_time.slice(0, 19)) - Date.now() < new Date(upcomming_event.start_time.slice(0, 19)) - Date.now()) {
+                            if (relativeStartTime(event) > 0) {
+                                if (relativeStartTime(event) < relativeStartTime(upcomming_event)) {
                                     upcomming_event = event;
                                 }
                             }
@@ -165,7 +173,7 @@
 
                     CDT(upcomming_event.start_time.slice(0, 19));
 
-                    if (new Date(upcomming_event.start_time.slice(0, 19)) - Date.now() < -15000000) {	// Standard: 15000000
+                    if (relativeStartTime(upcomming_event) < -15000000) {	// Standard: 15000000
 
                         document.getElementById("clock_string").innerHTML = "No upcomming meeting...";
                     }
