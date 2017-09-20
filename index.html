@@ -80,8 +80,6 @@
             .replace(/\//g, '&#x2F;');
     }
 
-	
-
     (function () {
         var httpRequest;
 
@@ -95,6 +93,10 @@
             httpRequest.onreadystatechange = alertContents;
             httpRequest.open('GET', url);
             httpRequest.send();
+        }
+
+        function addEventCard(unique_element, event) {
+            unique_element.innerHTML = unique_element.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + (event.hasOwnProperty('description') ? escapeHTML(event.description) : '') + '</details></article>';
         }
 
         function alertContents() {
@@ -112,16 +114,14 @@
                     var hasNextNight = false;
                     var hasNextEvent = false;
 
-                    var open_source_unique_id = 0;
-
                     obj.forEach(function (event) {
                         if (new Date(event.start_time.slice(0, 19)) > Date.now()) {     // The event is in the future
                             if (event.name.startsWith('Open Source Night')) {
                                 hasNextNight = true;
-                                opensourcenight_next.innerHTML = opensourcenight_next.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + (event.hasOwnProperty('description') ? escapeHTML(event.description) : '') + '</details></article>';
+                                addEventCard(opensourcenight_next, event);
                             } else {
                                 hasNextEvent = true;
-                                opensourceevent_next.innerHTML = opensourceevent_next.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '<br>' + '</time><details>' + (event.hasOwnProperty('description') ? escapeHTML(event.description) : '') + '</details></article>';
+                                addEventCard(opensourceevent_next, event);
                             }
 
                             if (new Date(event.start_time.slice(0, 19)) - Date.now() > 0) {
@@ -132,9 +132,9 @@
                         }
                         else {
                             if (event.name.startsWith('Open Source Night')) {
-                                opensourcenight_events.innerHTML = opensourcenight_events.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + (event.hasOwnProperty('description') ? escapeHTML(event.description) : '') + '</details></article>';
+                                addEventCard(opensourcenight_events, event);
                             } else {
-                                opensourceevent_events.innerHTML = opensourceevent_events.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + (event.hasOwnProperty('description') ? escapeHTML(event.description) : '') + '</details></article>';
+                                addEventCard(opensourceevent_events, event);
                             }
 
                             if (new Date(event.start_time.slice(0, 19)) - Date.now() > 0) {
@@ -143,8 +143,6 @@
                                 }
                             }
                         }
-
-                        open_source_unique_id++;
                     });
 
                     if(!hasNextNight)
@@ -157,15 +155,12 @@
                         opensourceevent_next.innerHTML = opensourceevent_next.innerHTML + '<article style="text-align: center">No Upcoming Open Source Event</article>';
                     }
 
-                    // HACKY TEMPORARY SOLUTION TO FIX WEBKIT PROBLEMS
-                    // It works for me, so good enough
+                    // Fixing problem with date-time in WEBKIT.
                     if ('WebkitAppearance' in document.documentElement.style) {
-                        // console.log(upcomming_event.start_time);
                         var s = upcomming_event.start_time.substr(12, 1);
                         var i = parseInt(s);
                         i--;
                         upcomming_event.start_time = upcomming_event.start_time.substr(0, 12) + i + upcomming_event.start_time.substr(13);
-                        // console.log(upcomming_event.start_time);
                     }
 
                     CDT(upcomming_event.start_time.slice(0, 19));
