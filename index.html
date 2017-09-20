@@ -31,9 +31,11 @@
         <div id="eventtitle">
 
         </div>
+        <!--
         <div id="fetchingdiv">
             Fetching event info...
         </div>
+        -->
         <time id="CDT">
         </time>
         <div id="current_description">
@@ -75,8 +77,10 @@
             .replace(/>/g, '&gt;')
             .replace(/\"/g, '&quot;')
             .replace(/\'/g, '&#39;')
-            .replace(/\//g, '&#x2F;')
+            .replace(/\//g, '&#x2F;');
     }
+
+	
 
     (function () {
         var httpRequest;
@@ -108,16 +112,16 @@
                     var hasNextNight = false;
                     var hasNextEvent = false;
 
+                    var open_source_unique_id = 0;
+
                     obj.forEach(function (event) {
-
-
-                        if (new Date(event.start_time.slice(0, 19)) > Date.now()) {
+                        if (new Date(event.start_time.slice(0, 19)) > Date.now()) {     // The event is in the future
                             if (event.name.startsWith('Open Source Night')) {
                                 hasNextNight = true;
-                                opensourcenight_next.innerHTML = opensourcenight_next.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + escapeHTML(event.description) + '</details></article>';
+                                opensourcenight_next.innerHTML = opensourcenight_next.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + (event.hasOwnProperty('description') ? escapeHTML(event.description) : '') + '</details></article>';
                             } else {
                                 hasNextEvent = true;
-                                opensourceevent_next.innerHTML = opensourceevent_next.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + escapeHTML(event.description) + '</details></article>';
+                                opensourceevent_next.innerHTML = opensourceevent_next.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '<br>' + '</time><details>' + (event.hasOwnProperty('description') ? escapeHTML(event.description) : '') + '</details></article>';
                             }
 
                             if (new Date(event.start_time.slice(0, 19)) - Date.now() > 0) {
@@ -128,9 +132,9 @@
                         }
                         else {
                             if (event.name.startsWith('Open Source Night')) {
-                                opensourcenight_events.innerHTML = opensourcenight_events.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + escapeHTML(event.description) + '</details></article>';
+                                opensourcenight_events.innerHTML = opensourcenight_events.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + (event.hasOwnProperty('description') ? escapeHTML(event.description) : '') + '</details></article>';
                             } else {
-                                opensourceevent_events.innerHTML = opensourceevent_events.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + escapeHTML(event.description) + '</details></article>';
+                                opensourceevent_events.innerHTML = opensourceevent_events.innerHTML + '<article><time>' + escapeHTML(event.name) + '<br>' + event.start_time.substring(0, 10) + '</time><details>' + (event.hasOwnProperty('description') ? escapeHTML(event.description) : '') + '</details></article>';
                             }
 
                             if (new Date(event.start_time.slice(0, 19)) - Date.now() > 0) {
@@ -139,6 +143,8 @@
                                 }
                             }
                         }
+
+                        open_source_unique_id++;
                     });
 
                     if(!hasNextNight)
@@ -154,12 +160,12 @@
                     // HACKY TEMPORARY SOLUTION TO FIX WEBKIT PROBLEMS
                     // It works for me, so good enough
                     if ('WebkitAppearance' in document.documentElement.style) {
-                        console.log(upcomming_event.start_time);
+                        // console.log(upcomming_event.start_time);
                         var s = upcomming_event.start_time.substr(12, 1);
                         var i = parseInt(s);
                         i--;
                         upcomming_event.start_time = upcomming_event.start_time.substr(0, 12) + i + upcomming_event.start_time.substr(13);
-                        console.log(upcomming_event.start_time);
+                        // console.log(upcomming_event.start_time);
                     }
 
                     CDT(upcomming_event.start_time.slice(0, 19));
@@ -170,10 +176,7 @@
                     }
 
                     document.getElementById("eventtitle").innerHTML = escapeHTML(upcomming_event.name);
-                    document.getElementById("current_description").innerHTML = escapeHTML(upcomming_event.description);
-
-                    // Hides the fetching div after finishing
-                    document.getElementById("fetchingdiv").style.display = 'none';
+                    document.getElementById("current_description").innerHTML = (upcomming_event.hasOwnProperty('description') ? escapeHTML(upcomming_event.description) : '');
                 } else {
                     alert('There was a problem with the request.');
                 }
